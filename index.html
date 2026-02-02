@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home X Engenharia | Premium</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --home-red: #BA2A1F;
+        }
+
+        .bg-homex-red {
+            background-color: var(--home-red);
+        }
+
+        .text-homex-red {
+            color: var(--home-red);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Swiper Engine Customization */
+        .swiper {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Setas: Resetando estilos nativos que causam conflito */
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: white !important;
+            transition: all 0.3s ease;
+            z-index: 100 !important;
+            /* Camada máxima absoluta */
+        }
+
+        .swiper-button-next:after,
+        .swiper-button-prev:after {
+            font-size: 20px !important;
+            /* Tamanho elegante */
+            font-weight: bold;
+        }
+
+        /* Mobile Menu Animation */
+        #mobile-menu {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* GSAP Initial States (Pre-render protection) */
+        .hero-title,
+        .hero-description,
+        #hero-cta {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Filtro unificado: Branco e Opaco */
+        .logo-filter {
+            filter: brightness(0) invert(1);
+            opacity: 0.3;
+            transition: all 0.6s ease;
+            transform: scale(0.85);
+        }
+
+        /* Estado Ativo (CENTRO): Cor Original e Brilho */
+        .swiper-slide-active .logo-filter,
+        .swiper-slide-active.logo-filter {
+            filter: brightness(1) invert(0);
+            /* Volta a cor original */
+            opacity: 1;
+            transform: scale(1.15);
+            /* Aumenta um pouco para dar destaque */
+        }
+
+        /* Ajuste das setas para não ficarem em cima das logos no mobile */
+        .swiper-logos-container .swiper-button-next {
+            right: -10px;
+        }
+
+        .swiper-logos-container .swiper-button-prev {
+            left: -10px;
+        }
+
+        /* Animação de Flutuação Suave */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* Animação de Brilho Sutil no Selo */
+        @keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 20px rgba(220, 38, 38, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+            }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-float-delayed {
+            animation: float 8s ease-in-out infinite;
+            animation-delay: 1s;
+        }
+
+        .seal-pulse {
+            animation: pulse-red 3s infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 overflow-x-hidden font-sans">
+
+    <nav class="sticky top-0 z-[1000] bg-homex-red shadow-2xl border-b border-red-800">
+        <div class="container mx-auto px-4 md:px-6 py-2 flex justify-between items-center">
+            <div class="flex-shrink-0">
+                <img src="midias/LOGO HOME (1).png" alt="Home X Engenharia" class="h-12 md:h-16 w-auto object-contain">
+            </div>
+
+            <div
+                class="hidden md:flex flex-grow justify-center space-x-10 font-bold uppercase text-[11px] tracking-[0.2em] text-white">
+                <a href="#" class="hover:text-black transition-all">Home</a>
+                <a href="#empresa" class="hover:text-black transition-all">A Empresa</a>
+                <a href="#tecnologia-icf" class="hover:text-black transition-all">ICF</a>
+                <a href="#obras" class="hover:text-black transition-all">Obras</a>
+                <a href="#servicos" class="hover:text-black transition-all">Serviços</a>
+
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <button
+                    class="bg-white text-homex-red px-6 py-2 text-[10px] font-black uppercase tracking-[0.15em] hover:bg-black hover:text-white transition-all rounded-sm shadow-md">
+                    Orçamento
+                </button>
+                <button id="menu-toggle" class="md:hidden text-white text-2xl focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="mobile-menu"
+        class="fixed inset-0 z-[1100] bg-gray-950/95 backdrop-blur-xl flex flex-col items-center justify-center translate-x-full lg:hidden transition-all duration-500 ease-[cubic-bezier(0.85,0,0.15,1)]">
+
+        <button id="menu-close" class="absolute top-8 right-8 text-white/50 hover:text-homex-red transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <div class="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none select-none">
+            <span class="text-[20vh] font-black uppercase">Home X</span>
+        </div>
+
+        <nav class="relative z-10 flex flex-col items-center space-y-10">
+            <a href="#" class="mobile-link group flex flex-col items-center">
+                <span
+                    class="text-homex-red text-[10px] font-bold tracking-[0.5em] mb-2 opacity-0 group-hover:opacity-100 transition-all uppercase">01.
+                    Início</span>
+                <span class="text-white text-3xl font-black uppercase tracking-tighter">Home</span>
+            </a>
+            <a href="#empresa" class="mobile-link group flex flex-col items-center">
+                <span
+                    class="text-homex-red text-[10px] font-bold tracking-[0.5em] mb-2 opacity-0 group-hover:opacity-100 transition-all uppercase">02.
+                    Tradição</span>
+                <span class="text-white text-3xl font-black uppercase tracking-tighter">A Empresa</span>
+            </a>
+            <a href="#tecnologia-icf" class="mobile-link group flex flex-col items-center">
+                <span
+                    class="text-homex-red text-[10px] font-bold tracking-[0.5em] mb-2 opacity-0 group-hover:opacity-100 transition-all uppercase">03.
+                    Inovação</span>
+                <span class="text-white text-3xl font-black uppercase tracking-tighter">Sistema ICF</span>
+            </a>
+            <a href="#obras" class="mobile-link group flex flex-col items-center">
+                <span
+                    class="text-homex-red text-[10px] font-bold tracking-[0.5em] mb-2 opacity-0 group-hover:opacity-100 transition-all uppercase">04.
+                    Portfólio</span>
+                <span class="text-white text-3xl font-black uppercase tracking-tighter">Obras</span>
+            </a>
+        </nav>
+
+        <div class="absolute bottom-12 flex space-x-8 text-white/40">
+            <a href="#" class="hover:text-homex-red transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+            <a href="#" class="hover:text-homex-red transition-colors"><i class="fab fa-whatsapp text-xl"></i></a>
+        </div>
+    </div>
+
+    <section class="relative h-[85vh] md:h-[80vh] bg-black overflow-hidden group">
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+
+                <div class="swiper-slide relative flex items-center md:items-end pb-10 md:pb-32">
+                    <div class="absolute inset-0 bg-black/60 z-10"></div>
+                    <div class="absolute inset-0">
+                        <img src="midias/image.png" class="w-full h-full object-cover grayscale-[20%]">
+                    </div>
+                    <div class="container mx-auto px-6 relative z-20">
+                        <div class="max-w-2xl text-left mb-16 md:mb-0">
+                            <h1
+                                class="hero-title text-3xl md:text-6xl font-black uppercase tracking-tighter leading-[0.9] text-white mb-4">
+                                Tecnologia <br class="md:hidden"> <span class="text-homex-red">ICF</span>
+                            </h1>
+                            <p
+                                class="hero-description text-xs md:text-base font-light tracking-[0.2em] text-gray-200 border-l-2 border-homex-red pl-4 leading-relaxed max-w-sm md:max-w-xl">
+                                Sustentabilidade e isolamento térmico de alto padrão. Engenharia de precisão para o seu
+                                projeto. //
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide relative flex items-center md:items-end pb-10 md:pb-32">
+                    <div class="absolute inset-0 bg-black/60 z-10"></div>
+                    <div class="absolute inset-0">
+                        <img src="midias/banner1.png" class="w-full h-full object-cover">
+                    </div>
+                    <div class="container mx-auto px-6 relative z-20">
+                        <div class="max-w-2xl text-left mb-16 md:mb-0">
+                            <h1
+                                class="hero-title text-3xl md:text-6xl font-black uppercase tracking-tighter leading-[0.9] text-white mb-4">
+                                Construa seu <br class="md:hidden"> <span class="text-homex-red">Futuro</span>
+                            </h1>
+                            <p
+                                class="hero-description text-xs md:text-base font-light tracking-[0.2em] text-gray-200 border-l-2 border-homex-red pl-4 leading-relaxed max-w-sm md:max-w-xl">
+                                Excelência em cada detalhe, do projeto à entrega final. Transformamos sonhos em
+                                estruturas sólidas. //
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-button-next hidden md:flex"></div>
+            <div class="swiper-button-prev hidden md:flex"></div>
+
+            <div class="absolute bottom-8 md:bottom-16 left-0 w-full z-40 pointer-events-none">
+                <div class="container mx-auto px-6 text-center md:text-left">
+                    <div class="pointer-events-auto inline-block" id="hero-cta">
+                        <a href="#empresa"
+                            class="group relative inline-block border border-white px-10 py-4 md:px-8 md:py-3 text-[10px] font-black uppercase tracking-[0.3em] overflow-hidden text-white bg-black/40 backdrop-blur-sm hover:border-homex-red transition-all duration-300">
+                            <span class="relative z-10 group-hover:text-black transition-colors duration-500">Fale
+                                Conosco</span>
+                            <div
+                                class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12 bg-homex-red overflow-hidden group">
+        <div class="container mx-auto px-6 text-center relative">
+            <p class="text-[10px] uppercase tracking-[0.4em] text-white/60 mb-10">Empresas que confiam na Home X</p>
+
+            <div class="swiper swiper-logos">
+                <div class="swiper-wrapper items-center">
+                    <div class="swiper-slide flex justify-center">
+                        <img src="midias/ibislogo.svg" class="h-8 md:h-12 object-contain logo-filter" alt="Ibis">
+                    </div>
+                    <div class="swiper-slide flex justify-center">
+                        <img src="midias/tabalmix-logo.png" class="h-8 md:h-12 object-contain logo-filter"
+                            alt="Tabalmix">
+                    </div>
+                    <div class="swiper-slide flex justify-center">
+                        <div class="logo-filter">
+                            <img src="midias/quadrangularlogo.png" class="h-8 md:h-12 object-contain"
+                                alt="Quadrangular">
+                        </div>
+                    </div>
+                    <div class="swiper-slide flex justify-center">
+                        <img src="midias/logo-tudor-baterias-novo.png" class="h-8 md:h-12 object-contain logo-filter"
+                            alt="Tudor">
+                    </div>
+                    <div class="swiper-slide flex justify-center">
+                        <img src="midias/embracologo.png" class="h-8 md:h-12 object-contain logo-filter" alt="Embraco">
+                    </div>
+                    <div class="swiper-slide flex justify-center">
+                        <div class="h-8 md:h-12 logo-filter flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="142" height="34" viewBox="0 0 142 34"
+                                fill="none" class="h-full w-auto">
+                                <path d="M78.6394 20.2955..." fill="currentColor"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="swiper-slide flex justify-center">
+                        <img src="midias/Logo-Urbix.png.webp" class="h-8 md:h-12 object-contain logo-filter"
+                            alt="Urbix">
+                    </div>
+                    <div class="swiper-slide flex justify-center">
+                        <img src="midias/logomix.png" class="h-8 md:h-12 object-contain logo-filter" alt="Grupo Mateus">
+                    </div>
+                    <div class="swiper-slide flex justify-center">
+                        <img src="midias/Screenshot_1.png" class="h-8 md:h-12 object-contain logo-filter"
+                            alt="Grupo Mateus">
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-button-next !text-white !scale-50 opacity-0 group-hover:opacity-100 transition-opacity">
+            </div>
+            <div class="swiper-button-prev !text-white !scale-50 opacity-0 group-hover:opacity-100 transition-opacity">
+            </div>
+        </div>
+    </section>
+
+
+    <section id="empresa" class="py-20 md:py-32 bg-white overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12 md:gap-24 items-center">
+
+                <div data-aos="fade-right" class="relative">
+                    <div class="absolute -left-6 top-0 w-1 h-20 bg-homex-red/20 hidden md:block"></div>
+
+                    <h2 class="text-[10px] font-black text-homex-red tracking-[0.5em] mb-6 uppercase">Patrimônio e
+                        Inovação</h2>
+                    <h3 class="text-3xl md:text-5xl font-black text-gray-900 mb-8 leading-tight tracking-tighter">
+                        Consolidação e rigor técnico em cada <span class="text-homex-red">estrutura.</span>
+                    </h3>
+
+                    <div class="space-y-6 text-gray-600 text-base leading-relaxed">
+                        <p>
+                            Com uma trajetória sólida desde 1980, a <strong class="text-gray-900">HOME X
+                                ENGENHARIA</strong> une décadas de experiência à vanguarda da construção civil. Somos
+                            especialistas no sistema <span
+                                class="font-bold text-gray-900 border-b-2 border-homex-red/30">ICF (Insulated Concrete
+                                Forms)</span>, método que garante eficiência energética e máxima resistência.
+                        </p>
+                        <p>
+                            Nossa equipe técnica possui expertise em projetos de alta complexidade, atendendo desde
+                            grandes corporações até residências exclusivas em condomínios de luxo.
+                        </p>
+                        <p>
+                            Com forte atuação em todo o Pará, especialmente em <strong
+                                class="text-gray-900 uppercase tracking-widest text-sm">Salinas</strong>, entregamos
+                            obras com pontualidade e padrão de qualidade inquestionável.
+                        </p>
+                    </div>
+
+
+                </div>
+
+                <div class="relative h-[500px] md:h-[650px]">
+
+                    <div
+                        class="absolute -top-4 -left-4 bg-homex-red text-white p-6 rounded-sm z-30 shadow-2xl flex flex-col items-center justify-center w-24 h-24 rotate-3 border-2 border-white seal-pulse">
+                        <span class="text-2xl font-black leading-none">45+</span>
+                        <span class="text-[7px] uppercase font-bold tracking-tighter text-center">Anos
+                            de<br>Mercado</span>
+                    </div>
+
+                    <div
+                        class="absolute top-0 right-0 w-[85%] h-[75%] overflow-hidden shadow-2xl rounded-sm animate-float">
+                        <img src="casa salinas.png" class="w-full h-full object-cover" alt="Obra Home X Salinas">
+                    </div>
+
+                    <div
+                        class="absolute bottom-4 left-0 w-[60%] h-[50%] z-20 overflow-hidden shadow-2xl rounded-sm border-[6px] border-white animate-float-delayed">
+                        <img src="casasalinasifc.png" class="w-full h-full object-cover"
+                            alt="Detalhe Engenharia Home X">
+                    </div>
+
+                    <div
+                        class="absolute -bottom-10 -right-10 w-64 h-64 bg-gray-100 -z-10 rounded-full animate-pulse opacity-50">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="tecnologia-icf" class="py-20 md:py-32 bg-gray-900 text-white overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+
+                <div data-aos="fade-right">
+                    <h2 class="text-homex-red font-bold uppercase tracking-[0.4em] text-xs mb-4">Especialidade Home X
+                    </h2>
+                    <h3 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-8 leading-none">
+                        Construa com o <span class="text-homex-red">ICF</span>:<br>
+                        Nossa maior habilidade.
+                    </h3>
+
+                    <div class="space-y-6 text-gray-400 leading-relaxed">
+                        <p>
+                            A <strong class="text-white">Home X Engenharia</strong> domina o método construtivo mais
+                            moderno do mundo. O ICF utiliza formas de poliestireno expandido preenchidas com concreto,
+                            criando uma estrutura única de alta performance.
+                        </p>
+
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <i class="fas fa-temperature-low text-homex-red mt-1 mr-4"></i>
+                                <span><strong class="text-white">Eficiência Energética:</strong> Redução de até 70% no
+                                    uso de ar-condicionado, ideal para o clima do Pará.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-shield-alt text-homex-red mt-1 mr-4"></i>
+                                <span><strong class="text-white">Resistência Extrema:</strong> Estruturas monolíticas
+                                    suportam abalos e intempéries com segurança superior.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-volume-mute text-homex-red mt-1 mr-4"></i>
+                                <span><strong class="text-white">Conforto Acústico:</strong> Isolamento profissional que
+                                    garante silêncio e privacidade absoluta.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-12">
+                        <a href="#contato"
+                            class="inline-block bg-homex-red text-white font-black uppercase text-[10px] tracking-widest px-10 py-5 hover:bg-white hover:text-black transition-all duration-500">
+                            Quero um projeto em ICF
+                        </a>
+                    </div>
+                </div>
+
+                <div class="relative" data-aos="fade-left">
+                    <div class="relative z-10 rounded-sm overflow-hidden shadow-2xl border-t-8 border-homex-red">
+                        <img src="midias/unnamed.jpg" class="w-full h-[500px] object-cover transition-all duration-1000"
+                            alt="Obra ICF Home X">
+                    </div>
+
+                    <div
+                        class="absolute -bottom-6 -left-6 bg-white p-8 shadow-2xl z-20 hidden md:block border-b-8 border-homex-red">
+                        <p class="text-black font-black text-3xl leading-none">
+                            <span id="counter-icf">0</span>%
+                        </p>
+                        <p class="text-gray-500 text-[9px] uppercase font-bold tracking-widest mt-2">Mais rápido que a
+                            alvenaria</p>
+                    </div>
+
+                    <div
+                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-white/10 -rotate-6 pointer-events-none">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="obras" class="py-20 md:py-32 bg-white overflow-hidden">
+        <div class="container mx-auto px-6">
+
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                <div data-aos="fade-right">
+                    <h2 class="text-homex-red font-bold uppercase tracking-[0.4em] text-xs mb-4">Portfólio</h2>
+                    <h3 class="text-4xl md:text-5xl font-black uppercase tracking-tighter text-gray-900 leading-none">
+                        Obras de <span class="text-homex-red">Alto Padrão</span><br>em todo o Pará.
+                    </h3>
+                </div>
+                <div data-aos="fade-left" class="md:text-right max-w-md">
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        De residências exclusivas em Salinas a grandes projetos corporativos. Cada estrutura reflete
+                        nosso compromisso com o rigor técnico e a inovação do sistema ICF.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+
+                <div class="md:col-span-8 group relative overflow-hidden h-[400px] md:h-[600px]" data-aos="zoom-in">
+                    <img src="casa salinas.png"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        alt="Residência de Luxo Salinas">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                        <span class="text-homex-red font-bold uppercase text-[10px] tracking-widest mb-2">Salinas /
+                            PA</span>
+                        <h4 class="text-white text-2xl font-bold uppercase tracking-tighter">Mansão Atlântica - Sistema
+                            ICF</h4>
+                    </div>
+                </div>
+
+                <div class="md:col-span-4 group relative overflow-hidden h-[400px] md:h-[600px]" data-aos="zoom-in"
+                    data-aos-delay="100">
+                    <img src="midias/unnamed.jpg"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        alt="Projeto Comercial">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                        <span class="text-homex-red font-bold uppercase text-[10px] tracking-widest mb-2">Belém /
+                            PA</span>
+                        <h4 class="text-white text-2xl font-bold uppercase tracking-tighter">Complexo Corporativo</h4>
+                    </div>
+                </div>
+
+                <div class="md:col-span-4 group relative overflow-hidden h-[300px] md:h-[400px]" data-aos="zoom-in"
+                    data-aos-delay="200">
+                    <img src="casasalinasifc.png"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        alt="Detalhe Estrutural">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                        <span class="text-homex-red font-bold uppercase text-[10px] tracking-widest mb-2">Técnico</span>
+                        <h4 class="text-white text-xl font-bold uppercase tracking-tighter">Fundação e Estrutura ICF
+                        </h4>
+                    </div>
+                </div>
+
+                <div class="md:col-span-8 group relative overflow-hidden h-[300px] md:h-[400px]" data-aos="zoom-in"
+                    data-aos-delay="300">
+                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        alt="Residência de Alto Padrão">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+                        <span class="text-homex-red font-bold uppercase text-[10px] tracking-widest mb-2">Ananindeua /
+                            PA</span>
+                        <h4 class="text-white text-2xl font-bold uppercase tracking-tighter">Condomínio Horizontal
+                            Especial</h4>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-16 text-center">
+                <a href="https://wa.me/seu-numero"
+                    class="inline-flex items-center gap-4 bg-gray-900 text-white px-12 py-6 uppercase font-black text-[10px] tracking-[0.3em] hover:bg-homex-red transition-all duration-500 group">
+                    Ver todos os projetos
+                    <i class="fas fa-arrow-right transition-transform group-hover:translate-x-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicos" class="py-20 md:py-32 bg-gray-50 border-y border-gray-200">
+        <div class="container mx-auto px-6">
+
+            <div class="mb-20 text-center" data-aos="fade-up">
+                <h2 class="text-homex-red font-bold uppercase tracking-[0.4em] text-xs mb-4">O que fazemos</h2>
+                <h3 class="text-3xl md:text-5xl font-black uppercase tracking-tighter text-gray-900 leading-none">
+                    Soluções completas em <br> <span class="text-homex-red">Engenharia de Performance</span>
+                </h3>
+                <div class="w-20 h-1 bg-homex-red mx-auto mt-8"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+
+                <div data-aos="fade-up" data-aos-delay="100"
+                    class="bg-white p-8 md:p-10 border-b-4 border-transparent hover:border-homex-red group transition-all duration-500 shadow-sm hover:shadow-2xl">
+                    <i
+                        class="fas fa-microchip text-4xl text-homex-red mb-8 group-hover:scale-110 transition-transform"></i>
+                    <h4 class="text-xl font-black mb-4 uppercase tracking-tighter text-gray-900">Consultoria ICF</h4>
+                    <p class="text-gray-500 text-sm leading-relaxed">Viabilidade técnica e econômica para implementação
+                        do sistema construtivo mais eficiente do mundo em seu projeto.</p>
+                </div>
+
+                <div data-aos="fade-up" data-aos-delay="200"
+                    class="bg-white p-8 md:p-10 border-b-4 border-transparent hover:border-homex-red group transition-all duration-500 shadow-sm hover:shadow-2xl">
+                    <i class="fas fa-crown text-4xl text-homex-red mb-8 group-hover:scale-110 transition-transform"></i>
+                    <h4 class="text-xl font-black mb-4 uppercase tracking-tighter text-gray-900">Residências de Luxo
+                    </h4>
+                    <p class="text-gray-500 text-sm leading-relaxed">Execução primorosa em Salinas e Belém, focada no
+                        conforto térmico e acabamento de altíssimo nível.</p>
+                </div>
+
+                <div data-aos="fade-up" data-aos-delay="300"
+                    class="bg-white p-8 md:p-10 border-b-4 border-transparent hover:border-homex-red group transition-all duration-500 shadow-sm hover:shadow-2xl">
+                    <i class="fas fa-city text-4xl text-homex-red mb-8 group-hover:scale-110 transition-transform"></i>
+                    <h4 class="text-xl font-black mb-4 uppercase tracking-tighter text-gray-900">Setor Corporativo</h4>
+                    <p class="text-gray-500 text-sm leading-relaxed">Infraestrutura técnica para grandes empresas e
+                        indústrias, garantindo rigor normativo e prazos recordes.</p>
+                </div>
+
+                <div data-aos="fade-up" data-aos-delay="400"
+                    class="bg-white p-8 md:p-10 border-b-4 border-transparent hover:border-homex-red group transition-all duration-500 shadow-sm hover:shadow-2xl">
+                    <i
+                        class="fas fa-clipboard-check text-4xl text-homex-red mb-8 group-hover:scale-110 transition-transform"></i>
+                    <h4 class="text-xl font-black mb-4 uppercase tracking-tighter text-gray-900">Gestão de Obras</h4>
+                    <p class="text-gray-500 text-sm leading-relaxed">Controle total de insumos, logística de canteiro e
+                        engenharia de custos para evitar desperdícios.</p>
+                </div>
+
+                <div data-aos="fade-up" data-aos-delay="500"
+                    class="bg-white p-8 md:p-10 border-b-4 border-transparent hover:border-homex-red group transition-all duration-500 shadow-sm hover:shadow-2xl">
+                    <i class="fas fa-tools text-4xl text-homex-red mb-8 group-hover:scale-110 transition-transform"></i>
+                    <h4 class="text-xl font-black mb-4 uppercase tracking-tighter text-gray-900">Retrofit Técnico</h4>
+                    <p class="text-gray-500 text-sm leading-relaxed">Modernização de estruturas existentes unindo a
+                        tradição de 1980 com as tecnologias de 2026.</p>
+                </div>
+
+                <div data-aos="fade-up" data-aos-delay="600"
+                    class="bg-white p-8 md:p-10 border-b-4 border-transparent hover:border-homex-red group transition-all duration-500 shadow-sm hover:shadow-2xl">
+                    <i
+                        class="fas fa-drafting-compass text-4xl text-homex-red mb-8 group-hover:scale-110 transition-transform"></i>
+                    <h4 class="text-xl font-black mb-4 uppercase tracking-tighter text-gray-900">Engenharia Legal</h4>
+                    <p class="text-gray-500 text-sm leading-relaxed">Regularização, laudos e projetos estruturais
+                        assinados por quem domina as normas técnicas do Pará.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-950 text-white pt-20 pb-10 overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+
+                <div class="space-y-6">
+                    <div class="text-2xl font-black tracking-[0.3em] uppercase">
+                        Home<span class="text-homex-red text-3xl">X</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Especialistas em sistemas construtivos de alta performance (ICF) e obras de alto padrão no Pará
+                        desde 1980.
+                    </p>
+                    <div class="flex space-x-5 text-gray-500">
+                        <a href="#" class="hover:text-homex-red transition-all duration-300"><i
+                                class="fab fa-instagram text-xl"></i></a>
+                        <a href="#" class="hover:text-homex-red transition-all duration-300"><i
+                                class="fab fa-linkedin-in text-xl"></i></a>
+                        <a href="#" class="hover:text-homex-red transition-all duration-300"><i
+                                class="fab fa-whatsapp text-xl"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold uppercase text-xs tracking-widest mb-6">Navegação</h4>
+                    <ul class="space-y-4 text-gray-400 text-sm">
+                        <li><a href="#empresa" class="hover:text-white transition-colors">Sobre Nós</a></li>
+                        <li><a href="#tecnologia-icf" class="hover:text-white transition-colors">Tecnologia ICF</a></li>
+                        <li><a href="#obras" class="hover:text-white transition-colors">Portfólio</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Trabalhe Conosco</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold uppercase text-xs tracking-widest mb-6">Unidade Belém</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        ENDEREÇO ,<br>
+                        Av. ENDEREÇO.
+                    </p>
+                    <p class="text-gray-400 text-sm font-bold">contato@homex.com.br</p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold uppercase text-xs tracking-widest mb-6">Unidade Salinas</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        ENDEREÇO ,<br>
+                        Av. ENDEREÇO.
+                    </p>
+                    <p class="text-gray-400 text-sm font-bold">(91) 000000000</p>
+                </div>
+            </div>
+
+            <hr class="border-gray-800 mb-10">
+
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-gray-600 text-[10px] tracking-[0.2em] uppercase text-center md:text-left">
+                    © 2026 Home X Engenharia. Responsável Técnico: Vitor Quaresma.
+                </p>
+                <div class="text-gray-600 text-[10px] tracking-[0.2em] uppercase flex gap-8">
+                    <a href="#" class="hover:text-white transition-colors">Política de Privacidade</a>
+                    <a href="#" class="hover:text-white transition-colors">Termos de Uso</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+
+        // Init AOS
+        AOS.init({ duration: 1000, once: true });
+
+        // Mobile Menu Logic
+        const menuToggle = document.getElementById('menu-toggle');
+        const menuClose = document.getElementById('menu-close');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
+            // Animação dos links entrando
+            gsap.fromTo(".mobile-link",
+                { y: 30, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power4.out", delay: 0.3 }
+            );
+        });
+
+        menuClose.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+        });
+
+        // Fechar ao clicar em qualquer link
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('translate-x-full');
+            });
+        });
+
+        // Senior GSAP Animation Engine
+        function animateHeroText(activeSlide) {
+            const title = activeSlide.querySelector('.hero-title');
+            const desc = activeSlide.querySelector('.hero-description');
+            const cta = document.querySelector('#hero-cta');
+
+            // Reset visibility
+            gsap.set([title, desc, cta], { visibility: 'visible' });
+
+            const timeline = gsap.timeline();
+            timeline.fromTo(title, { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 1.4, ease: "expo.out", delay: 0.2 })
+                .fromTo(desc, { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 1.4, ease: "expo.out" }, "-=1.1")
+                .fromTo(cta, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power4.out" }, "-=0.9");
+        }
+
+        // Swiper Initialization
+        const swiper = new Swiper(".mySwiper", {
+            loop: true,
+            effect: "fade",
+            fadeEffect: { crossFade: true },
+            speed: 1200,
+            autoplay: { delay: 8000, disableOnInteraction: false },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            on: {
+                init: function () { animateHeroText(this.slides[this.activeIndex]); },
+                slideChangeTransitionStart: function () { animateHeroText(this.slides[this.activeIndex]); }
+            }
+        });
+
+        var swiperLogos = new Swiper(".swiper-logos", {
+            loop: true,
+            centeredSlides: true, // ESSENCIAL para o destaque central
+            slidesPerView: 2,     // Mobile: 2 logos
+            spaceBetween: 30,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            breakpoints: {
+                768: { slidesPerView: 3 }, // Tablet
+                1024: { slidesPerView: 5 } // Desktop
+            }
+        });
+
+        function animateCounter() {
+            const counterElement = document.getElementById('counter-icf');
+            let count = { val: 0 };
+
+            gsap.to(count, {
+                val: 70,
+                duration: 3, // 3 segundos de animação para dar impacto
+                ease: "power2.out",
+                onUpdate: function () {
+                    counterElement.innerText = Math.floor(count.val);
+                }
+            });
+        }
+
+        // 2. O "Observador" que vigia a rolagem da página
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                // Se o elemento aparecer na tela
+                if (entry.isIntersecting) {
+                    animateCounter();
+                    observer.unobserve(entry.target); // Para de contar para não repetir toda hora
+                }
+            });
+        }, { threshold: 0.8 }); // Só dispara quando 80% do número estiver visível
+
+        // 3. Ativa o vigia no seu elemento
+        observer.observe(document.getElementById('counter-icf'));
+    </script>
+    <div class="fixed bottom-6 right-6 z-[1000] flex items-center group">
+        <span
+            class="mr-3 bg-white text-gray-800 text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-4 group-hover:translate-x-0 pointer-events-none border border-gray-100">
+            Fazer Orçamento
+        </span>
+
+        <a href="https://wa.me/5591900000000?text=Olá!%20Gostaria%20de%20fazer%20um%20orçamento%20com%20a%20Home%20X%20Engenharia."
+            target="_blank"
+            class="bg-[#25D366] text-white w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform duration-300 animate-bounce-slow">
+            <i class="fab fa-whatsapp text-3xl md:text-4xl"></i>
+        </a>
+    </div>
+
+    <style>
+        /* Animação suave de flutuação */
+        @keyframes bounce-slow {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .animate-bounce-slow {
+            animation: bounce-slow 3s infinite ease-in-out;
+        }
+    </style>
+</body>
+
+</html>
