@@ -64,23 +64,27 @@
             visibility: hidden;
         }
 
-        /* Filtro unificado: Branco e Opaco */
-        .logo-filter {
-            filter: brightness(0) invert(1);
-            opacity: 0.3;
-            transition: all 0.6s ease;
-            transform: scale(0.85);
-        }
+        /* Filtro de Logos: Escala de cinza suave para não brigar com o design */
+    .logo-filter-new {
+        filter: grayscale(100%) contrast(0.7);
+        opacity: 0.3;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: scale(0.8); /* Ficam levemente menores nas laterais */
+    }
 
-        /* Estado Ativo (CENTRO): Cor Original e Brilho */
-        .swiper-slide-active .logo-filter,
-        .swiper-slide-active.logo-filter {
-            filter: brightness(1) invert(0);
-            /* Volta a cor original */
-            opacity: 1;
-            transform: scale(1.15);
-            /* Aumenta um pouco para dar destaque */
-        }
+    /* Logo em destaque (Ativa ou Hover) */
+    .swiper-slide-active .logo-filter-new,
+    .logo-filter-new:hover {
+        filter: grayscale(0%) contrast(1);
+        opacity: 1;
+        transform: scale(1.2); /* Cresce mais para dar o ar de "Gigante" */
+    }
+    
+    /* Padding extra para o Swiper não "clipar" a logo ampliada */
+    .swiper-logos {
+        padding: 40px 0 !important;
+    }
+    
 
         /* Ajuste das setas para não ficarem em cima das logos no mobile */
         .swiper-logos-container .swiper-button-next {
@@ -155,10 +159,11 @@
             </div>
 
             <div class="flex items-center space-x-4">
-                <button
-                    class="bg-white text-homex-red px-6 py-2 text-[10px] font-black uppercase tracking-[0.15em] hover:bg-black hover:text-white transition-all rounded-sm shadow-md">
-                    Orçamento
-                </button>
+                <a href="https://wa.me/559184618815?text=Olá!%20Gostaria%20de%20falar%20com%20a%20Home%20X%20sobre%20um%20novo%20projeto." 
+   target="_blank"
+   class="inline-block bg-white text-homex-red px-6 py-2 text-[10px] font-black uppercase tracking-[0.15em] hover:bg-black hover:text-white transition-all rounded-sm shadow-md text-center">
+    Orçamento
+</a>
                 <button id="menu-toggle" class="md:hidden text-white text-2xl focus:outline-none">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -220,7 +225,7 @@
                 <div class="swiper-slide relative flex items-center md:items-end pb-10 md:pb-32">
                     <div class="absolute inset-0 bg-black/60 z-10"></div>
                     <div class="absolute inset-0">
-                        <img src="midias/image.png" class="w-full h-full object-cover grayscale-[20%]">
+                        <img src="banner1.jpg" class="w-full h-full object-cover grayscale-[20%]">
                     </div>
                     <div class="container mx-auto px-6 relative z-20">
                         <div class="max-w-2xl text-left mb-16 md:mb-0">
@@ -240,7 +245,7 @@
                 <div class="swiper-slide relative flex items-center md:items-end pb-10 md:pb-32">
                     <div class="absolute inset-0 bg-black/60 z-10"></div>
                     <div class="absolute inset-0">
-                        <img src="midias/banner1.png" class="w-full h-full object-cover">
+                        <img src="midias/unnamed.jpg" class="w-full h-full object-cover">
                     </div>
                     <div class="container mx-auto px-6 relative z-20">
                         <div class="max-w-2xl text-left mb-16 md:mb-0">
@@ -264,7 +269,8 @@
             <div class="absolute bottom-8 md:bottom-16 left-0 w-full z-40 pointer-events-none">
                 <div class="container mx-auto px-6 text-center md:text-left">
                     <div class="pointer-events-auto inline-block" id="hero-cta">
-                        <a href="#empresa"
+                        <a href="https://wa.me/559184618815?text=Olá!%20Vim%20pelo%20site%20da%20Home%20X%20Engenharia%20e%20gostaria%20de%20solicitar%20um%20orçamento." 
+                        target="_blank"
                             class="group relative inline-block border border-white px-10 py-4 md:px-8 md:py-3 text-[10px] font-black uppercase tracking-[0.3em] overflow-hidden text-white bg-black/40 backdrop-blur-sm hover:border-homex-red transition-all duration-300">
                             <span class="relative z-10 group-hover:text-black transition-colors duration-500">Fale
                                 Conosco</span>
@@ -278,60 +284,44 @@
         </div>
     </section>
 
-    <section class="py-12 bg-homex-red overflow-hidden group">
-        <div class="container mx-auto px-6 text-center relative">
-            <p class="text-[10px] uppercase tracking-[0.4em] text-white/60 mb-10">Empresas que confiam na Home X</p>
+    <section class="py-16 bg-gray-50 border-y border-gray-100 overflow-hidden group">
+    <div class="container mx-auto px-6 text-center relative">
+        <h4 class="text-[9px] font-black uppercase tracking-[0.4em] text-gray-400 mb-12">
+            Empresas atendidas pela <span class="text-homex-red">Home X</span>
+        </h4>
 
-            <div class="swiper swiper-logos">
-                <div class="swiper-wrapper items-center">
-                    <div class="swiper-slide flex justify-center">
-                        <img src="midias/ibislogo.svg" class="h-8 md:h-12 object-contain logo-filter" alt="Ibis">
-                    </div>
-                    <div class="swiper-slide flex justify-center">
-                        <img src="midias/tabalmix-logo.png" class="h-8 md:h-12 object-contain logo-filter"
-                            alt="Tabalmix">
-                    </div>
-                    <div class="swiper-slide flex justify-center">
-                        <div class="logo-filter">
-                            <img src="midias/quadrangularlogo.png" class="h-8 md:h-12 object-contain"
-                                alt="Quadrangular">
-                        </div>
-                    </div>
-                    <div class="swiper-slide flex justify-center">
-                        <img src="midias/logo-tudor-baterias-novo.png" class="h-8 md:h-12 object-contain logo-filter"
-                            alt="Tudor">
-                    </div>
-                    <div class="swiper-slide flex justify-center">
-                        <img src="midias/embracologo.png" class="h-8 md:h-12 object-contain logo-filter" alt="Embraco">
-                    </div>
-                    <div class="swiper-slide flex justify-center">
-                        <div class="h-8 md:h-12 logo-filter flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="142" height="34" viewBox="0 0 142 34"
-                                fill="none" class="h-full w-auto">
-                                <path d="M78.6394 20.2955..." fill="currentColor"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="swiper-slide flex justify-center">
-                        <img src="midias/Logo-Urbix.png.webp" class="h-8 md:h-12 object-contain logo-filter"
-                            alt="Urbix">
-                    </div>
-                    <div class="swiper-slide flex justify-center">
-                        <img src="midias/logomix.png" class="h-8 md:h-12 object-contain logo-filter" alt="Grupo Mateus">
-                    </div>
-                    <div class="swiper-slide flex justify-center">
-                        <img src="midias/Screenshot_1.png" class="h-8 md:h-12 object-contain logo-filter"
-                            alt="Grupo Mateus">
-                    </div>
+        <div class="swiper swiper-logos !overflow-visible">
+            <div class="swiper-wrapper items-center">
+                <div class="swiper-slide flex justify-center">
+                    <img src="midias/ibislogo.svg" class="h-12 md:h-20 object-contain logo-filter-new" alt="Ibis">
                 </div>
-            </div>
-
-            <div class="swiper-button-next !text-white !scale-50 opacity-0 group-hover:opacity-100 transition-opacity">
-            </div>
-            <div class="swiper-button-prev !text-white !scale-50 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div class="swiper-slide flex justify-center">
+                    <img src="midias/tabalmix-logo.png" class="h-12 md:h-20 object-contain logo-filter-new" alt="Tabalmix">
+                </div>
+                <div class="swiper-slide flex justify-center">
+                    <img src="midias/quadrangularlogo.png" class="h-12 md:h-20 object-contain logo-filter-new" alt="Quadrangular">
+                </div>
+                <div class="swiper-slide flex justify-center">
+                    <img src="midias/logo-tudor-baterias-novo.png" class="h-12 md:h-20 object-contain logo-filter-new" alt="Tudor">
+                </div>
+                <div class="swiper-slide flex justify-center">
+                    <img src="midias/embracologo.png" class="h-12 md:h-20 object-contain logo-filter-new" alt="Embraco">
+                </div>
+                <div class="swiper-slide flex justify-center">
+                    <img src="midias/Logo-Urbix.png.webp" class="h-12 md:h-20 object-contain logo-filter-new" alt="Urbix">
+                </div>
+                <div class="swiper-slide flex justify-center">
+    <div class="bg-[#004a94] p-4 md:p-6 rounded-sm flex items-center justify-center h-12 md:h-20 w-auto logo-filter-new transition-all duration-500">
+        <img src="midias/logomix.png" class="h-full w-auto object-contain" alt="Grupo Mateus">
+    </div>
+</div>
             </div>
         </div>
-    </section>
+
+        <div class="swiper-button-next !text-gray-300 !scale-50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="swiper-button-prev !text-gray-300 !scale-50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+    </div>
+</section>
 
 
     <section id="empresa" class="py-20 md:py-32 bg-white overflow-hidden">
@@ -380,12 +370,12 @@
 
                     <div
                         class="absolute top-0 right-0 w-[85%] h-[75%] overflow-hidden shadow-2xl rounded-sm animate-float">
-                        <img src="casa salinas.png" class="w-full h-full object-cover" alt="Obra Home X Salinas">
+                        <img src="IMG_7426.jpeg" class="w-full h-full object-cover" alt="Obra Home X Salinas">
                     </div>
 
                     <div
                         class="absolute bottom-4 left-0 w-[60%] h-[50%] z-20 overflow-hidden shadow-2xl rounded-sm border-[6px] border-white animate-float-delayed">
-                        <img src="casasalinasifc.png" class="w-full h-full object-cover"
+                        <img src="IMG_7427.jpeg" class="w-full h-full object-cover"
                             alt="Detalhe Engenharia Home X">
                     </div>
 
@@ -437,7 +427,8 @@
                     </div>
 
                     <div class="mt-12">
-                        <a href="#contato"
+                        <a  href="https://wa.me/559184618815?text=Olá!%20Vim%20pelo%20site%20da%20Home%20X%20Engenharia%20e%20gostaria%20de%20solicitar%20um%20orçamento." 
+                        target="_blank"
                             class="inline-block bg-homex-red text-white font-black uppercase text-[10px] tracking-widest px-10 py-5 hover:bg-white hover:text-black transition-all duration-500">
                             Quero um projeto em ICF
                         </a>
@@ -446,18 +437,18 @@
 
                 <div class="relative" data-aos="fade-left">
                     <div class="relative z-10 rounded-sm overflow-hidden shadow-2xl border-t-8 border-homex-red">
-                        <img src="midias/unnamed.jpg" class="w-full h-[500px] object-cover transition-all duration-1000"
+                        <img src="IMG_7437.jpeg" class="w-full h-[500px] object-cover transition-all duration-1000"
                             alt="Obra ICF Home X">
                     </div>
 
-                    <div
-                        class="absolute -bottom-6 -left-6 bg-white p-8 shadow-2xl z-20 hidden md:block border-b-8 border-homex-red">
-                        <p class="text-black font-black text-3xl leading-none">
-                            <span id="counter-icf">0</span>%
-                        </p>
-                        <p class="text-gray-500 text-[9px] uppercase font-bold tracking-widest mt-2">Mais rápido que a
-                            alvenaria</p>
-                    </div>
+                    <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 md:-bottom-6 md:left-auto md:translate-x-0 md:-left-6 bg-white p-6 md:p-8 shadow-2xl z-20 border-b-8 border-homex-red w-[180px] md:w-auto text-center md:text-left">
+    <p class="text-black font-black text-3xl md:text-4xl leading-none">
+        <span id="counter-icf">0</span>%
+    </p>
+    <p class="text-gray-500 text-[9px] md:text-[10px] uppercase font-bold tracking-widest mt-2">
+        Mais rápido que a <br class="hidden md:block"> alvenaria
+    </p>
+</div>
 
                     <div
                         class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-white/10 -rotate-6 pointer-events-none">
@@ -635,11 +626,15 @@
                         desde 1980.
                     </p>
                     <div class="flex space-x-5 text-gray-500">
-                        <a href="#" class="hover:text-homex-red transition-all duration-300"><i
+                        <a href="https://www.instagram.com/homexengenharia/"
+                        target="_blank"
+                         class="hover:text-homex-red transition-all duration-300"><i
                                 class="fab fa-instagram text-xl"></i></a>
                         <a href="#" class="hover:text-homex-red transition-all duration-300"><i
                                 class="fab fa-linkedin-in text-xl"></i></a>
-                        <a href="#" class="hover:text-homex-red transition-all duration-300"><i
+                        <a href="https://wa.me/559184618815?text=Olá!%20Gostaria%20de%20falar%20com%20a%20Home%20X%20sobre%20um%20novo%20projeto." 
+   target="_blank"
+                         class="hover:text-homex-red transition-all duration-300"><i
                                 class="fab fa-whatsapp text-xl"></i></a>
                     </div>
                 </div>
@@ -658,18 +653,10 @@
                     <h4 class="text-white font-bold uppercase text-xs tracking-widest mb-6">Unidade Belém</h4>
                     <p class="text-gray-400 text-sm leading-relaxed mb-4">
                         ENDEREÇO ,<br>
-                        Av. ENDEREÇO.
+                        Travessa Visconde de Pirajá, 550, Pedreira
                     </p>
                     <p class="text-gray-400 text-sm font-bold">contato@homex.com.br</p>
-                </div>
-
-                <div>
-                    <h4 class="text-white font-bold uppercase text-xs tracking-widest mb-6">Unidade Salinas</h4>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
-                        ENDEREÇO ,<br>
-                        Av. ENDEREÇO.
-                    </p>
-                    <p class="text-gray-400 text-sm font-bold">(91) 000000000</p>
+                    <p class="text-gray-400 text-sm font-bold">+55 91 8461-8815</p>
                 </div>
             </div>
 
@@ -806,7 +793,7 @@
             Fazer Orçamento
         </span>
 
-        <a href="https://wa.me/5591900000000?text=Olá!%20Gostaria%20de%20fazer%20um%20orçamento%20com%20a%20Home%20X%20Engenharia."
+        <a href="https://wa.me/559184618815?text=Olá!%20Vim%20pelo%20site%20da%20Home%20X%20Engenharia%20e%20gostaria%20de%20solicitar%20um%20orçamento."
             target="_blank"
             class="bg-[#25D366] text-white w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform duration-300 animate-bounce-slow">
             <i class="fab fa-whatsapp text-3xl md:text-4xl"></i>
